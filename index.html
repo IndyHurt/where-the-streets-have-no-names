@@ -8,6 +8,33 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['named or not', 'kilometers'],
+          ['Unnamed Kilometers', 2270],
+          ['Named Kilometers',  30890]
+        ]);
+
+        var options = {
+          title: 'Kansas City, Residential Roads Without Names',
+          colors: ['red', 'grey']
+        };
+        
+        var formatter1 = new google.visualization.NumberFormat({pattern:'###,###'});
+        formatter1.format(data, 1);
+        
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+    
   </head>
   <body>
     <section class="page-header">
@@ -20,9 +47,60 @@
 
     <section class="main-content">
       <h1>
-<a id="where-the-streets-have-no-names" class="anchor" href="#where-the-streets-have-no-names" aria-hidden="true"><span class="octicon octicon-link"></span></a>where-the-streets-have-no-names</h1>
+<a id="streets-should-have-names" class="anchor" href="#streets-should-have-names" aria-hidden="true"><span class="octicon octicon-link"></span></a>Streets should have names!</h1>
 
-<p>Simple visualization of OpenStreetMap road segments that don't have names to encourage edits.</p>
+
+
+<ol style="list-style-type:disc">
+        <li><b>How can street names be used?</b>
+          <p></p>
+            <ol>
+                <li>Help with search results.  If a street is made up of many segments and some of them have names, you can usually search and find the street.  If all of the segments that make up the street have no name at all, you’re out of luck!</li>
+                <p></p>
+                <li>Help with turn-by-turn directions.  Routing is hard.  There are a lot of features in the data that are necessary before you can generate great routes.  There are also many features related to routing.  One of them is spoken or listed turn-by-turn directions. </li>
+                <p></p>  
+                  <ul style="list-style-type:none">
+                      <li>Which would you prefer?</li>
+                        <ol type="a">
+                          <li>"turn right in 500 feet at Elm Street"</li>
+                          <li>"turn right in 500 feet"</li>
+                          <li>"turn right in 500 feet at [pause of silence or blank space]"</li>
+                        </ol>
+                  </ul>
+                <p></p>
+                <li>Help with labeling.  The more you zoom in, the more labels you might see, but not if the features don’t have names.</li>
+            </ol>
+        </li>
+        <p></p>
+        <li><b>We are missing some street names here!</b>
+
+            <p></p>
+            <ol>
+                <li>There are many different types of streets, but check out this pie chart for residential roads in Kansas City!</li>
+                <div id="piechart" style="width: 900px; height: 500px;"></div>
+                <li>Here is a map showing many types of roads that don't have names.</li>
+                <p> Peter's Tangram map will go right here and it will be awwwwwwwesome! </p>
+            </ol>
+        </li>
+        <p></p>
+        <li><b>How you can help improve streets without names:</b>
+            <p></p>
+            <ol>
+                <li>To add a name, shift-click a red road to open the iD editor and edit it!  Not familiar with Kansas City?  Search for your home town or one near it and pan over to an area you know!</li>
+                <p></p>
+                <li>Need instructions on how to edit with iD?  Here are some outstanding tutorials from LearnOSM, the OpenStreetMap wiki, and the United States Department of State’s Humanitarian Information Unit</li>
+                    <p></p>
+                    <ol>
+                      <li><a href="http://learnosm.org/en/">http://learnosm.org/en/</a></li>
+                      <li><a href="http://wiki.openstreetmap.org/wiki/Beginners'_guide">http://wiki.openstreetmap.org/wiki/Beginners'_guide</a></li>
+                      <li><a href="http://mapgive.state.gov/learn-to-map/">http://mapgive.state.gov/learn-to-map/</a></li>
+                    </ol>  
+                <p></p>
+                <l1>Are you a mapping wiz and interested in a more advanced editor?  Try out JOSM with excellent documentation from Mapbox:  <a href="https://www.mapbox.com/blog/osm-mapping-guide/">https://www.mapbox.com/blog/osm-mapping-guide/</a></li>
+
+            </ol>
+        </li>
+    </ol>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/IndyHurt/where-the-streets-have-no-names">Where-the-streets-have-no-names</a> is maintained by <a href="https://github.com/IndyHurt">IndyHurt</a>.</span>
