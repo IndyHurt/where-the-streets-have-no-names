@@ -4,7 +4,7 @@
 cameras:
     camera1:
         type: perspective
-        position: [-95.1613, 39.1824, 12] # lon/lat for Lawrence, KS at zoom 12
+        position: [-99.12800, 19.42800, 12] # lon/lat for Mexico City at zoom 12
 
 labels-global:
     - &text_visible_continent         true
