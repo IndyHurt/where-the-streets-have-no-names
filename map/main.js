@@ -27,10 +27,10 @@ map = (function () {
 
     // normal case, eg: http://tangrams.github.io/nameless-maps/?roads#4/0/0
     var url_search = window.location.search.slice(1).split('/')[0];
-    console.log('url_search', url_search);
+    // console.log('url_search', url_search);
     if (url_search.length > 0) {
         style_file = url_search + ".yaml";
-        console.log('style_file', style_file);
+        // console.log('style_file', style_file);
     }
 
     /*** Map ***/
