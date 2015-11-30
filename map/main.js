@@ -37,7 +37,7 @@ map = (function () {
     /*** Map ***/
 
     var map = L.map('map',
-        {"keyboardZoomOffset" : .05}
+        {"keyboardZoomOffset" : .05, "scrollWheelZoom": false }
     );
     map.setView(map_start_location.slice(0, 2), map_start_location[2]);
 
@@ -143,10 +143,13 @@ map = (function () {
                     url += 'way=' + scene.selection.feature.properties.id;
                 }
 
+                // Ideally, we'd know the feature's center.lat and center.lng, but we only know the scene's, so skip this for now
                 if (scene.center) {
-                    var center = scene.baseZoom(scene.zoom) + '/' + scene.center.lat + '/' + scene.center.lng;
+                    var center = '19' + '/' + scene.center.lat + '/' + scene.center.lng;
                 }
-                url += '#map=19/';
+                // We want to zoom into the feature at a high zoom, but that's broken
+                // url += '#map=' + center;
+                // So we ignore this for now and hope OSM.org does the right thing
 
                 var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+center;
                 
@@ -168,8 +171,8 @@ map = (function () {
 	                popup.style.visibility = 'visible';
 	            }
                 popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
-                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Fix with iD ➹</a>' + '</span><br>';
-                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + josmUrl + '">Fix with JOSM ➹</a>' + '</span><br>';
+                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Edit with iD ➹</a>' + '</span><br>';
+                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + josmUrl + '">Edit with JOSM ➹</a>' + '</span><br>';
             });
         });
 
