@@ -1743,7 +1743,7 @@ layers:
                 lines:
                     interactive: true
                     order: 1000
-                    color: darktourquoise
+                    color: darkturquoise
                     width: [[14, 8px], [16, 15]]
             smaller-roads:
                 filter:
