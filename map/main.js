@@ -81,48 +81,48 @@ map = (function () {
         var popup = document.getElementById('popup'); // click-popup
 
         // Show selected feature on hover
-        map.getContainer().addEventListener('mousemove', function (event) {
-            if (picking) return;
-            var pixel = { x: event.clientX, y: event.clientY };
-
-            scene.getFeatureAt(pixel).then(function(selection) {
-                if (!selection) {
-                    return;
-                }
-                var feature = selection.feature;
-                if (feature != null) {
-
-                    var label = '';
-                    if (feature.properties != null) {
-
-                        var obj = JSON.parse(JSON.stringify(feature.properties));
-                        label = "";
-                        for (x in feature.properties) {
-                            if (x == "sort_key" || x == "id" || x == "source") continue;
-                            val = feature.properties[x]
-                            label += "<span class='labelLine' key="+x+" value="+val+" onclick='setValuesFromSpan(this)'>"+x+" : "+val+"</span><br>"
-                        }
-                    }
-
-                    if (label != '') {
-                        info.innerHTML = '<span class="labelInner">' + label + '</span>';
-                        info.style.left = (pixel.x + 5) + 'px';
-                        info.style.top = (pixel.y + 10) + 'px';
-                        info.style.visibility = 'visible';
-                    }
-                    else if (info.parentNode != null) {
-                        info.style.visibility = 'hidden';
-                    }
-                }
-                else if (info.parentNode != null) {
-                    info.style.visibility = 'hidden';
-                }
-            });
-
-        });
+//         map.getContainer().addEventListener('mousemove', function (event) {
+//             if (picking) return;
+//             var pixel = { x: event.clientX, y: event.clientY };
+// 
+//             scene.getFeatureAt(pixel).then(function(selection) {
+//                 if (!selection) {
+//                     return;
+//                 }
+//                 var feature = selection.feature;
+//                 if (feature != null) {
+// 
+//                     var label = '';
+//                     if (feature.properties != null) {
+// 
+//                         var obj = JSON.parse(JSON.stringify(feature.properties));
+//                         label = "";
+//                         for (x in feature.properties) {
+//                             if (x == "sort_key" || x == "id" || x == "source") continue;
+//                             val = feature.properties[x]
+//                             label += "<span class='labelLine' key="+x+" value="+val+" onclick='setValuesFromSpan(this)'>"+x+" : "+val+"</span><br>"
+//                         }
+//                     }
+// 
+//                     if (label != '') {
+//                         info.innerHTML = '<span class="labelInner">' + label + '</span>';
+//                         info.style.left = (pixel.x + 5) + 'px';
+//                         info.style.top = (pixel.y + 10) + 'px';
+//                         info.style.visibility = 'visible';
+//                     }
+//                     else if (info.parentNode != null) {
+//                         info.style.visibility = 'hidden';
+//                     }
+//                 }
+//                 else if (info.parentNode != null) {
+//                     info.style.visibility = 'hidden';
+//                 }
+//             });
+// 
+//         });
 
         // feature edit popup
-        map.getContainer().addEventListener('mouseup', function (event) {
+        map.getContainer().addEventListener('mousemove', function (event) {
             picking = true;
             info.style.visibility = 'hidden';
 
@@ -162,12 +162,14 @@ map = (function () {
                     }
                 }
 
-                popup.style.left = (pixel.x + 5) + 'px';
-                popup.style.top = (pixel.y + 10) + 'px';
-                popup.style.visibility = 'visible';
-                popup.innerHTML = '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Edit with iD ➹</a>' + '</span><br>';
-                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + josmUrl + '">Edit with JOSM ➹</a>' + '</span><br>';
-                popup.style.visibility = 'visible';
+                popup.style.left = (pixel.x + 0) + 'px';
+                popup.style.top = (pixel.y + 0) + 'px';
+                if ( scene.selection.feature.properties.name == undefined) {
+	                popup.style.visibility = 'visible';
+	            }
+                popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
+                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Fix with iD ➹</a>' + '</span><br>';
+                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + josmUrl + '">Fix with JOSM ➹</a>' + '</span><br>';
             });
         });
 
