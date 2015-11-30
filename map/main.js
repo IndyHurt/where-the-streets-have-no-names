@@ -7,7 +7,7 @@ map = (function () {
 
     // defaults
     var map_start_location = [0, 0, 2]; // world
-    var style_file = 'scene.yaml';
+    var style_file = 'roads.yaml';
 
     /*** URL parsing ***/
 
