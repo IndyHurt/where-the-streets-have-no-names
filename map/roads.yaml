@@ -4,7 +4,7 @@
 cameras:
     camera1:
         type: perspective
-        position: [19.426866, -99.134441, 12] # lon/lat for Mexico City at zoom 12
+        position: [-99.134441, 19.426866, 12] # lon/lat for Mexico City at zoom 12
 
 labels-global:
     - &text_visible_continent         true
