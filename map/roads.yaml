@@ -31,11 +31,11 @@ labels-global:
     - &text_visible_highway           true
     - &text_visible_highway_e         false
     - &text_visible_trunk_primary     true
-    - &text_visible_trunk_primary_e   false
+    - &text_visible_trunk_primary_e   true
     - &text_visible_secondary         true
-    - &text_visible_secondary_e       false
+    - &text_visible_secondary_e       true
     - &text_visible_tertiary          true
-    - &text_visible_tertiary_e        false
+    - &text_visible_tertiary_e        true
     - &text_visible_minor_road        true
     - &text_visible_minor_road_e      true
     - &text_visible_service_road      true
