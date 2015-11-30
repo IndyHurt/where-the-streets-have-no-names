@@ -709,7 +709,7 @@ layers:
             }
         red:
             filter:
-                highway: [ motorway, trunk, primary, secondary, residential, service, tertiary, road, track, unclassified, living_street ]
+                highway: [ motorway, trunk, primary, secondary, residential, service, tertiary, road, unclassified, living_street ]
                 # highway: [ motorway, motorway_link, trunk, trunk_link, primary, primary_link, secondary, secondary_link, residential, residential_link, service, tertiary, tertiary_link, road, track, unclassified, living_street ]
                 not:
                     any:
