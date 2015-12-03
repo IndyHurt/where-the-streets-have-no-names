@@ -709,11 +709,11 @@ layers:
             }
         red:
             filter:
-                highway: [ motorway, trunk, primary, secondary, residential, service, tertiary, road, unclassified, living_street ]
+                highway: [ motorway, trunk, primary, secondary, residential, tertiary, road, living_street ]
                 # highway: [ motorway, motorway_link, trunk, trunk_link, primary, primary_link, secondary, secondary_link, residential, residential_link, service, tertiary, tertiary_link, road, track, unclassified, living_street ]
                 not:
                     any:
-                        - kind: [minor_road, path2]
+                        - kind: [path]
                         - landuse_kind: [parking]
                         - is_link: yes
                         - aeroway: [runway, taxiway]
@@ -725,7 +725,7 @@ layers:
                     width: [[14, 8px], [16, 15]]
             smaller-roads:
                 filter:
-                    highway: [ secondary, residential, service, tertiary, road, track, unclassified, living_street ]
+                    highway: [ secondary, residential, tertiary, road, living_street ]
                 draw:
                     lines:
                         width: [[14, 5px], [16, 10]]
