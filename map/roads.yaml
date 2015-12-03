@@ -716,6 +716,7 @@ layers:
                         - kind: [minor_road, path2]
                         - landuse_kind: [parking]
                         - is_link: yes
+                        - aeroway: [runway, taxiway]
             draw:
                 lines:
                     interactive: true
