@@ -20,7 +20,6 @@ map = (function () {
     // location is passed through url
     if (url_hash.length == 3) {
         var defaultpos = false;
-        console.log('hash:', url_hash);
         map_start_location = [url_hash[1],url_hash[2], url_hash[0]];
         // convert from strings
         map_start_location = map_start_location.map(Number);
@@ -28,10 +27,10 @@ map = (function () {
 
     // normal case, eg: http://tangrams.github.io/nameless-maps/?roads#4/0/0
     var url_search = window.location.search.slice(1).split('/')[0];
-    console.log('url_search', url_search);
+    // console.log('url_search', url_search);
     if (url_search.length > 0) {
         style_file = url_search + ".yaml";
-        console.log('style_file', style_file);
+        // console.log('style_file', style_file);
     }
 
     /*** Map ***/
@@ -207,7 +206,7 @@ map = (function () {
         // Scene initialized
         layer.on('init', function() {
             initFeatureSelection();
-            console.log('1 map loc:', map_start_location, '\ncamera pos:', scene.camera.position);
+            //console.log('1 map loc:', map_start_location, '\ncamera pos:', scene.camera.position);
             if (defaultpos && typeof scene.camera.position != "undefined") {
                 map_start_location = [scene.camera.position[1], scene.camera.position[0], scene.camera.position[2]]
             }
