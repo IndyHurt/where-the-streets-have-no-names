@@ -7,7 +7,7 @@ map = (function () {
 
     // defaults
     var map_start_location = [0, 0, 2]; // world
-    var style_file = 'scene.yaml';
+    var style_file = 'roads.yaml';
 
     /*** URL parsing ***/
 
@@ -36,7 +36,7 @@ map = (function () {
     /*** Map ***/
 
     var map = L.map('map',
-        {"keyboardZoomOffset" : .05}
+        {"keyboardZoomOffset" : .05, "scrollWheelZoom": false }
     );
     map.setView(map_start_location.slice(0, 2), map_start_location[2]);
 
@@ -80,48 +80,48 @@ map = (function () {
         var popup = document.getElementById('popup'); // click-popup
 
         // Show selected feature on hover
-        map.getContainer().addEventListener('mousemove', function (event) {
-            if (picking) return;
-            var pixel = { x: event.clientX, y: event.clientY };
-
-            scene.getFeatureAt(pixel).then(function(selection) {
-                if (!selection) {
-                    return;
-                }
-                var feature = selection.feature;
-                if (feature != null) {
-
-                    var label = '';
-                    if (feature.properties != null) {
-
-                        var obj = JSON.parse(JSON.stringify(feature.properties));
-                        label = "";
-                        for (x in feature.properties) {
-                            if (x == "sort_key" || x == "id" || x == "source") continue;
-                            val = feature.properties[x]
-                            label += "<span class='labelLine' key="+x+" value="+val+" onclick='setValuesFromSpan(this)'>"+x+" : "+val+"</span><br>"
-                        }
-                    }
-
-                    if (label != '') {
-                        info.innerHTML = '<span class="labelInner">' + label + '</span>';
-                        info.style.left = (pixel.x + 5) + 'px';
-                        info.style.top = (pixel.y + 10) + 'px';
-                        info.style.visibility = 'visible';
-                    }
-                    else if (info.parentNode != null) {
-                        info.style.visibility = 'hidden';
-                    }
-                }
-                else if (info.parentNode != null) {
-                    info.style.visibility = 'hidden';
-                }
-            });
-
-        });
+//         map.getContainer().addEventListener('mousemove', function (event) {
+//             if (picking) return;
+//             var pixel = { x: event.clientX, y: event.clientY };
+// 
+//             scene.getFeatureAt(pixel).then(function(selection) {
+//                 if (!selection) {
+//                     return;
+//                 }
+//                 var feature = selection.feature;
+//                 if (feature != null) {
+// 
+//                     var label = '';
+//                     if (feature.properties != null) {
+// 
+//                         var obj = JSON.parse(JSON.stringify(feature.properties));
+//                         label = "";
+//                         for (x in feature.properties) {
+//                             if (x == "sort_key" || x == "id" || x == "source") continue;
+//                             val = feature.properties[x]
+//                             label += "<span class='labelLine' key="+x+" value="+val+" onclick='setValuesFromSpan(this)'>"+x+" : "+val+"</span><br>"
+//                         }
+//                     }
+// 
+//                     if (label != '') {
+//                         info.innerHTML = '<span class="labelInner">' + label + '</span>';
+//                         info.style.left = (pixel.x + 5) + 'px';
+//                         info.style.top = (pixel.y + 10) + 'px';
+//                         info.style.visibility = 'visible';
+//                     }
+//                     else if (info.parentNode != null) {
+//                         info.style.visibility = 'hidden';
+//                     }
+//                 }
+//                 else if (info.parentNode != null) {
+//                     info.style.visibility = 'hidden';
+//                 }
+//             });
+// 
+//         });
 
         // feature edit popup
-        map.getContainer().addEventListener('mouseup', function (event) {
+        map.getContainer().addEventListener('mousemove', function (event) {
             picking = true;
             info.style.visibility = 'hidden';
 
@@ -142,10 +142,13 @@ map = (function () {
                     url += 'way=' + scene.selection.feature.properties.id;
                 }
 
+                // Ideally, we'd know the feature's center.lat and center.lng, but we only know the scene's, so skip this for now
                 if (scene.center) {
-                    var center = scene.baseZoom(scene.zoom) + '/' + scene.center.lat + '/' + scene.center.lng;
+                    var center = '19' + '/' + scene.center.lat + '/' + scene.center.lng;
                 }
-                url += '#map=19/';
+                // We want to zoom into the feature at a high zoom, but that's broken
+                // url += '#map=' + center;
+                // So we ignore this for now and hope OSM.org does the right thing
 
                 var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+center;
                 
@@ -161,12 +164,25 @@ map = (function () {
                     }
                 }
 
-                popup.style.left = (pixel.x + 5) + 'px';
-                popup.style.top = (pixel.y + 10) + 'px';
-                popup.style.visibility = 'visible';
-                popup.innerHTML = '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Edit with iD ➹</a>' + '</span><br>';
+                popup.style.left = (pixel.x + 0) + 'px';
+                popup.style.top = (pixel.y + 0) + 'px';
+                
+                var highway_vals = ['motorway','trunk','primary','secondary','residential','tertiary','road','living_street'];
+                var aeroway_vals = ['runway','taxiway'];
+                
+                if ( (scene.selection.feature.properties.name == undefined || scene.selection.feature.properties.ref == undefined) && 
+                	 highway_vals.indexOf( scene.selection.feature.properties.highway ) > -1 &&
+                	 !(scene.selection.feature.properties.kind == "path") &&
+                	 /*!(scene.selection.feature.properties.landuse_kind == "forest") &&*/
+                	 /*!(scene.selection.feature.properties.landuse_kind == "parking") &&*/
+                	 !(scene.selection.feature.properties.is_link == "yes") &&
+                	 !(aeroway_vals.indexOf( scene.selection.feature.properties.aeroway ) > -1)
+                ) {
+	                popup.style.visibility = 'visible';
+	            }
+                popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
+                popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + url + '">Edit with iD ➹</a>' + '</span><br>';
                 popup.innerHTML += '<span class="labelInner">' + '<a target="_blank" href="' + josmUrl + '">Edit with JOSM ➹</a>' + '</span><br>';
-                popup.style.visibility = 'visible';
             });
         });
 
@@ -177,6 +193,14 @@ map = (function () {
 
     }
 
+    function inIframe () {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
+    }
+    
     // Add map
     window.addEventListener('load', function () {
         // Scene initialized
@@ -188,6 +212,9 @@ map = (function () {
             }
             map.setView([map_start_location[0], map_start_location[1]], map_start_location[2]);
         });
+        if (!inIframe()) {
+            map.scrollWheelZoom.enable();
+        }
         layer.addTo(map);
     });
 
