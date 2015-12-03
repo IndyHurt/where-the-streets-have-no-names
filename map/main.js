@@ -183,6 +183,14 @@ map = (function () {
 
     }
 
+    function inIframe () {
+        try {
+            return window.self !== window.top;
+        } catch (e) {
+            return true;
+        }
+    }
+    
     // Add map
     window.addEventListener('load', function () {
         // Scene initialized
@@ -194,6 +202,9 @@ map = (function () {
             }
             map.setView([map_start_location[0], map_start_location[1]], map_start_location[2]);
         });
+        if (!inIframe()) {
+            map.scrollWheelZoom.enable();
+        }
         layer.addTo(map);
     });
 
