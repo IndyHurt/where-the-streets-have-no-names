@@ -3933,6 +3933,7 @@ layers:
                     filter: function() { return feature.name && feature.name.indexOf("National Park") > -1; }
                     visible: *label_visible_landuse_green
                     draw:
+                        # visible: *label_visible_landuse_green
                         icons:
                             visible: *icon_visible_landuse_green
                             sprite: park
@@ -3968,6 +3969,7 @@ layers:
                         - { $zoom: { min: 17 } }
                 visible: *label_visible_landuse_green
                 draw:
+                    # visible: *label_visible_landuse_green
                     icons:
                         visible: *icon_visible_landuse_green
                         sprite: forest
@@ -4072,6 +4074,7 @@ layers:
                         - { $zoom: { min: 18 } }
                 visible: *label_visible_landuse_green
                 draw:
+                    # visible: *label_visible_landuse_green
                     text:
                         visible: *text_visible_landuse_green
                         interactive: *interactive
@@ -4214,6 +4217,7 @@ layers:
                             visible: false
             station-train-subway:
                 filter: { kind: [station, train-station, train_station], $zoom: { min: 11 } }
+                # draw:   { visible: *label_visible_station, icons: { visible: *icon_visible_station, sprite: train-station, size: [[13,12px],[14,14px],[15,16px],[17,20px]] }, text: { visible: *text_visible_station } }
                 visible: *label_visible_station
                 draw:   { icons: { visible: *icon_visible_station, sprite: train-station, size: [[13,12px],[14,14px],[15,16px],[17,20px]] }, text: { visible: *text_visible_station } }
                 low-priority-early:
