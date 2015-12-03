@@ -141,11 +141,11 @@ map = (function () {
                 // generate osm edit link
                 var url = 'https://www.openstreetmap.org/edit?';
 
-                if (scene.selection.feature && scene.selection.feature.properties.id) {
-                    url += 'way=' + scene.selection.feature.properties.id;
-                }
-
                 var position = '19' + '/' + latlng[0] + '/' + latlng[1];
+
+                if (scene.selection.feature && scene.selection.feature.properties.id) {
+                    url += 'way=' + scene.selection.feature.properties.id + '#map=' + position;
+                }
 
                 var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+position;
                 
