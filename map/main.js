@@ -167,7 +167,18 @@ map = (function () {
 
                 popup.style.left = (pixel.x + 0) + 'px';
                 popup.style.top = (pixel.y + 0) + 'px';
-                if ( scene.selection.feature.properties.name == undefined) {
+                
+                var highway_vals = ['motorway','trunk','primary','secondary','residential','tertiary','road','living_street'];
+                var aeroway_vals = ['runway','taxiway'];
+                
+                if ( (scene.selection.feature.properties.name == undefined || scene.selection.feature.properties.ref == undefined) && 
+                	 highway_vals.indexOf( scene.selection.feature.properties.highway ) > -1 &&
+                	 !(scene.selection.feature.properties.kind == "path") &&
+                	 /*!(scene.selection.feature.properties.landuse_kind == "forest") &&*/
+                	 /*!(scene.selection.feature.properties.landuse_kind == "parking") &&*/
+                	 !(scene.selection.feature.properties.is_link == "yes") &&
+                	 !(aeroway_vals.indexOf( scene.selection.feature.properties.aeroway ) > -1)
+                ) {
 	                popup.style.visibility = 'visible';
 	            }
                 popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
