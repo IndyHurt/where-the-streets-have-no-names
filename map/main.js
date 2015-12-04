@@ -48,6 +48,7 @@ map = (function () {
     window.layer = layer;
     var scene = layer.scene;
     window.scene = scene;
+    var latlng = [];
 
     // setView expects format ([lat, long], zoom)
     var hash = new L.Hash(map);
@@ -120,6 +121,8 @@ map = (function () {
 // 
 //         });
 
+        map.addEventListener('mousemove', function (e) { latlng = [e.latlng.lat, e.latlng.lng]; });
+
         // feature edit popup
         map.getContainer().addEventListener('mousemove', function (event) {
             picking = true;
@@ -138,19 +141,13 @@ map = (function () {
                 // generate osm edit link
                 var url = 'https://www.openstreetmap.org/edit?';
 
+                var position = '19' + '/' + latlng[0] + '/' + latlng[1];
+
                 if (scene.selection.feature && scene.selection.feature.properties.id) {
-                    url += 'way=' + scene.selection.feature.properties.id;
+                    url += 'way=' + scene.selection.feature.properties.id + '#map=' + position;
                 }
 
-                // Ideally, we'd know the feature's center.lat and center.lng, but we only know the scene's, so skip this for now
-                if (scene.center) {
-                    var center = '19' + '/' + scene.center.lat + '/' + scene.center.lng;
-                }
-                // We want to zoom into the feature at a high zoom, but that's broken
-                // url += '#map=' + center;
-                // So we ignore this for now and hope OSM.org does the right thing
-
-                var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+center;
+                var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+position;
                 
                 // extra label information - currently unused
                 var label = '';
