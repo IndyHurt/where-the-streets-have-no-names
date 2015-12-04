@@ -45,6 +45,7 @@ labels-global:
 zinc-light-gray-colors:
     interactivity:
         - &interactive                false
+
     cameras:
         - &camera_settings            { type: isometric, axis: [0, .1], vanishing_point: [0, -500] }
 
@@ -691,7 +692,7 @@ styles:
     icons:
         base: points
         texture: pois
-        interactive: &interactive
+        interactive: *interactive
 
 scene:
     background:
@@ -849,7 +850,7 @@ layers:
         filter: { kind: [railway,subway,light_rail], $zoom: { min: 14 } }
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 order: function() { return (6 + feature.sort_key) | 6; }
         railway:
             filter: { kind: railway }
@@ -876,7 +877,7 @@ layers:
         filter: { kind: rail, not: { railway: [subway,light_rail] } }
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 color: [[14,*rail1_e],[16,*rail1]]
                 width: [[15,0.5px],[16,0.75px],[18,1m]]
         service:
@@ -908,7 +909,7 @@ layers:
         filter: { not: { kind: rail } }
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 #color: black
                 width: 1px
             text:
@@ -1926,7 +1927,7 @@ layers:
             draw:
                 lines:
                     order: 20
-                    interactive: &interactive
+                    interactive: *interactive
                     color: '#444'
                     width: [[14, 0.5px], [15, 1.0px], [16, 2m]]
             gondola_cable_car:
@@ -1979,7 +1980,7 @@ layers:
         filter: { kind: city_wall }
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 order: 8
                 color: *city_wall
                 width: [[12, 0.75px], [13, 1.0px], [14, 1.2px], [15, 2.0px], [16, 2.5px], [19, 6m]]
@@ -1988,7 +1989,7 @@ layers:
         filter: { kind: retaining_wall }
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 order: 8
                 color: *retaining_wall
                 width: [[14, 0.5px], [15, 1.0px], [16, 1.5px], [17, 2.0px], [19, 4m]]
@@ -2102,7 +2103,7 @@ layers:
                 - { $zoom: { min: 20 }, name: true }
         draw:
             text:
-                interactive: &interactive
+                interactive: *interactive
                 order: 7
                 font:
                     fill: *text_fill
@@ -2134,7 +2135,7 @@ layers:
                 - { $zoom: { min: 20 }, [ kind: true, addr_housenumber: true, name: false ] }
         draw:
             text:
-                interactive: &interactive
+                interactive: *interactive
                 order: 7
                 visible: *text_visible_address
                 text_source: addr_housenumber
@@ -2150,7 +2151,7 @@ layers:
         # country subdivisions (states, provinces)
         draw:
             lines:
-                interactive: &interactive
+                interactive: *interactive
                 order: 11
 #                color: red
 #                width: [[8, 1px], [14, 2px], [16, 3px], [17, 8m]]
@@ -2162,7 +2163,7 @@ layers:
                     - admin_level: 2
             draw:
                 lines:
-                    interactive: &interactive
+                    interactive: *interactive
                     order: 13
                     color: *country_boundary
                     width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
@@ -2181,7 +2182,7 @@ layers:
                     - admin_level: 4
             draw:
                 lines:
-                    interactive: &interactive
+                    interactive: *interactive
                     order: 12
                     color: *region_boundary
                     width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
@@ -2200,7 +2201,7 @@ layers:
 #            filter: { kind: county, $zoom: { min: 10 } }
 #            draw:
 #                lines:
-#                    interactive: &interactive
+#                    interactive: *interactive
 #                    order: 6
 #                    color: *subregion_boundary
 #                    width: [[9, 1px], [14, 2px], [16, 3px], [17, 8m]]
@@ -2241,7 +2242,7 @@ layers:
                         stroke: { color: *text_stroke, width: 4 }
 #                icons:
 #                    size: [[13, 12px], [15, 18px]]
-#                    interactive: &interactive
+#                    interactive: *interactive
 #                    sprite: *townspot_sprite
             early-ones-z3:
                 # US, Brazil, China, Russia, Canada, Greenland, Iceland, Australia, India, Japan, Guam, Indonesia, South Africa, Egypt, Nigeria, Kenya
@@ -2281,7 +2282,7 @@ layers:
                         stroke: { color: *text_stroke, width: 4 }
 #                icons:
 #                    size: [[13, 12px], [15, 18px]]
-#                    interactive: &interactive
+#                    interactive: *interactive
 #                    sprite: *townspot_sprite
             small-ones-z7:
                 filter: { name: [Liechtenstein,San Marino,Civitatis Vaticanæ,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 7, max: 8} }
@@ -2339,7 +2340,7 @@ layers:
                         transform: uppercase
     #            icons:
     #                size: [[13, 12px], [15, 18px]]
-    #                interactive: &interactive
+    #                interactive: *interactive
     #                sprite: *townspot_sprite
             pesky:
                 filter: { name: ["Western Cape","Eastern Cape","Northern Cape","North West","Limpopo","KwaZulu-Natal","Hamburg","Freie und Hansestadt Hamburg","Neuchâtel","Nordrhein-Westfalen","Haute-Normandie","Baden-Württemberg","Bayern","Sachsen-Anhalt","Berlin","Mecklenburg-Vorpommern","Schleswig-Holstein","Brandenburg","Niedersachsen","Saarland","Thüringen","Hessen","Sachsen"], $zoom: {min: 6, max: 8} }
@@ -2365,7 +2366,7 @@ layers:
                 draw:
                     text:
                         priority: 1
-                        interactive: &interactive
+                        interactive: *interactive
                         visible: *text_visible_populated_places
                         font:
                             size: 10px
@@ -2373,7 +2374,7 @@ layers:
                             # stroke: { color: *text_stroke, width: 4 }
                     icons:
                         size: 7px
-                        interactive: &interactive
+                        interactive: *interactive
                         visible: *icon_visible_populated_places
                         sprite: townspot-xs-rev
 
@@ -2382,7 +2383,7 @@ layers:
                 draw:
                     text:
                         priority: 1
-                        interactive: &interactive
+                        interactive: *interactive
                         visible: *text_visible_populated_places
                         font:
                             size: 11px
@@ -2390,7 +2391,7 @@ layers:
                             # stroke: { color: *text_stroke, width: 4 }
                     icons:
                         size: 7px
-                        interactive: &interactive
+                        interactive: *interactive
                         visible: *icon_visible_populated_places
                         sprite: townspot-xs-rev
 
@@ -2401,7 +2402,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
@@ -2409,7 +2410,7 @@ layers:
                                 # stroke: { color: *text_stroke, width: 4 }
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
 
@@ -2418,7 +2419,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
@@ -2426,7 +2427,7 @@ layers:
                                 # stroke: { color: *text_stroke, width: 4 }
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
 
@@ -2438,13 +2439,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 13px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2461,13 +2462,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2493,13 +2494,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 15px
                         icons:
                             size: 13px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2516,13 +2517,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 12px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2545,13 +2546,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 10px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
                     capital:
@@ -2577,13 +2578,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2600,13 +2601,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2629,13 +2630,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2670,13 +2671,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2694,13 +2695,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2725,14 +2726,14 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 fill: [0.25,0.25,0.25]
                                 size: 11px
                         icons:
                             size: 9x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2757,13 +2758,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 8px
                         icons:
                             size: 8x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
                     capital:
@@ -2790,13 +2791,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 8px
                         icons:
                             size: 8x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
                     capital:
@@ -2822,13 +2823,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2845,13 +2846,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2874,13 +2875,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2915,13 +2916,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 17px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -2940,13 +2941,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -2971,13 +2972,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3002,13 +3003,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 9px
                         icons:
                             size: 8x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
                     capital:
@@ -3036,13 +3037,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 9px
                         icons:
                             size: 8x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
                     capital:
@@ -3068,13 +3069,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -3091,13 +3092,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3120,13 +3121,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3161,13 +3162,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 17px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
 
@@ -3178,13 +3179,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
 
@@ -3195,13 +3196,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
 
@@ -3212,13 +3213,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 9px
                         icons:
                             size: 8x
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-xs-rev
 
@@ -3230,13 +3231,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -3253,13 +3254,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3282,13 +3283,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3324,7 +3325,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: false
                             font:
                                 size: 18px
@@ -3336,7 +3337,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 14px
@@ -3348,7 +3349,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 10px
@@ -3361,13 +3362,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -3384,13 +3385,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3413,13 +3414,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3456,7 +3457,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 18px
@@ -3468,7 +3469,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 14px
@@ -3480,7 +3481,7 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
@@ -3493,13 +3494,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 16px
                         icons:
                             size: 14px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-m-rev
                     capital:
@@ -3516,13 +3517,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 13px
                         icons:
                             size: 11px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3545,13 +3546,13 @@ layers:
                     draw:
                         text:
                             priority: 1
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *text_visible_populated_places
                             font:
                                 size: 11px
                         icons:
                             size: 9px
-                            interactive: &interactive
+                            interactive: *interactive
                             visible: *icon_visible_populated_places
                             sprite: townspot-s-rev
                     capital:
@@ -3574,7 +3575,7 @@ layers:
                 draw:
                     text:
                         priority: 1
-                        interactive: &interactive
+                        interactive: *interactive
                         visible: *text_visible_populated_places
                         font:
                             size: 12px
@@ -3833,13 +3834,13 @@ layers:
         draw:
             icons:
                 size: [[13, 14px], [16, 16px], [19, 20px]]
-                interactive: &interactive
+                interactive: *interactive
                 visible: false
             text:
                 visible: false    # labels are enabled by each layer below
                 move_into_tile: false
                 offset: [[13,13px],[14,15px],[16,19px]]
-                interactive: &interactive
+                interactive: *interactive
                 font:
                     family: Helvetica
                     weight: 500
@@ -3888,7 +3889,7 @@ layers:
                         # sprite_source: kind
                         sprite: function() { return feature.kind; }
                         visible: *icon_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
 
             # add generic icon at high zoom, if direct match fails
             generic-icons:
@@ -3897,7 +3898,7 @@ layers:
                     icons:
                         sprite_default: generic
                         visible: *icon_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
 
             # add generic icon at high zoom
             default-label-text:
@@ -3905,7 +3906,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -3935,10 +3936,10 @@ layers:
                         icons:
                             visible: *icon_visible_landuse_green
                             sprite: park
-                            interactive: &interactive
+                            interactive: *interactive
                         text:
                             visible: *text_visible_landuse_green
-                            interactive: &interactive
+                            interactive: *interactive
                             offset: [0, 14px]
                             font:
                                 fill: *text_fill_park
@@ -3970,10 +3971,10 @@ layers:
                     icons:
                         visible: *icon_visible_landuse_green
                         sprite: forest
-                        interactive: &interactive
+                        interactive: *interactive
                     text:
                         visible: *text_visible_landuse_green
-                        interactive: &interactive
+                        interactive: *interactive
                         offset: [0, 14px]
                         font:
                             fill: *text_fill_park
@@ -4037,7 +4038,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_landuse_green
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -4045,7 +4046,7 @@ layers:
                     icons:
                         sprite: airport
                         visible: *icon_visible_landuse_green
-                        interactive: &interactive
+                        interactive: *interactive
                 early:
                     filter: { $zoom: { max: 12 } }
                     # todo: huh?
@@ -4073,7 +4074,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_landuse_green
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -4081,7 +4082,7 @@ layers:
                     icons:
                         sprite: college-university
                         visible: *icon_visible_landuse_green
-                        interactive: &interactive
+                        interactive: *interactive
                 early:
                     filter: { $zoom: { max: 14 } }
                     draw: { text: { font: { size: 11px } } }
@@ -4109,7 +4110,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -4118,7 +4119,7 @@ layers:
                         sprite: function() { return feature.kind; }
                         sprite_default: generic
                         visible: *icon_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
                 building-like:
                     filter: { kind: [commercial,residential,warehouse,public,dormitory], osm_relation: false }
                     draw:
@@ -4189,7 +4190,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -4251,7 +4252,7 @@ layers:
                 draw:
                     text:
                         visible: *text_visible_poi_landuse
-                        interactive: &interactive
+                        interactive: *interactive
                         font:
                             fill: *text_fill
                             size: 12px
@@ -4753,7 +4754,7 @@ layers:
         # debug only
 #        icons:
 #            size: [[13, 12px], [15, 18px]]
-#            interactive: &interactive
+#            interactive: *interactive
 #            sprite: *townspot_sprite
     water-line-labels:
         data: { source: osm, layer: [water] }
