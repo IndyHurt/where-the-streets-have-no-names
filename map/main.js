@@ -48,7 +48,6 @@ map = (function () {
     window.layer = layer;
     var scene = layer.scene;
     window.scene = scene;
-    var latlng = [];
 
     // setView expects format ([lat, long], zoom)
     var hash = new L.Hash(map);
@@ -121,17 +120,17 @@ map = (function () {
 // 
 //         });
 
-        map.addEventListener('mousemove', function (e) { latlng = [e.latlng.lat, e.latlng.lng]; });
-
         // feature edit popup
         map.getContainer().addEventListener('mousemove', function (event) {
             picking = true;
             info.style.visibility = 'hidden';
 
             var pixel = { x: event.clientX, y: event.clientY };
+            var latlng = map.mouseEventToLatLng(event);
 
             scene.getFeatureAt(pixel).then(function(selection) {
                 var feature = selection.feature;
+
                 if (!selection || feature == null) {
                     picking = false;
                     popup.style.visibility = 'hidden';
@@ -141,10 +140,10 @@ map = (function () {
                 // generate osm edit link
                 var url = 'https://www.openstreetmap.org/edit?';
 
-                var position = '19' + '/' + latlng[0] + '/' + latlng[1];
+                var position = '19' + '/' + latlng.lat + '/' + latlng.lng;
 
-                if (scene.selection.feature && scene.selection.feature.properties.id) {
-                    url += 'way=' + scene.selection.feature.properties.id + '#map=' + position;
+                if (selection.feature && selection.feature.properties.id) {
+                    url += 'way=' + selection.feature.properties.id + '#map=' + position;
                 }
 
                 var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+position;
@@ -164,7 +163,7 @@ map = (function () {
                 popup.style.left = (pixel.x + 0) + 'px';
                 popup.style.top = (pixel.y + 0) + 'px';
                 
-                if ( scene.selection.feature.properties.name == undefined) {
+                if (selection.feature.properties.name == undefined) {
 	                popup.style.visibility = 'visible';
 	            }
                 popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
@@ -210,32 +209,53 @@ map = (function () {
        });
     }
 
-	function long2tile(lon,zoom) { return (Math.floor((lon+180)/360*Math.pow(2,zoom))); }
+	function long2tile(lon,zoom) { 
+        // console.log('lon:', lon, 'zoom:', zoom);
+        return (Math.floor((lon+180)/360*Math.pow(2,zoom))); }
 	function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); }    
 
     /***** Render loop *****/
 	
 	function addGUI () {
+
 		// Link to edit in OSM - hold 'e' and click
 		function onMapClick(e) {
+            var pixel = { x: e.clientX, y: e.clientY };
+            var latlng = map.mouseEventToLatLng(e.originalEvent);
 			if (key.shift) {
 				var url = 'https://www.openstreetmap.org/edit?';
+                scene.getFeatureAt(pixel).then(function(selection) {
+                    console.log(selection.feature, selection.changed);
 
-				if (scene.selection.feature && scene.selection.feature.id) {
-					url += 'way=' + scene.selection.feature.id;
-				}
+                    if (selection.feature && selection.feature.id) {
+    					url += 'way=' + selection.feature.id;
+    				}
 
-				if (scene.center) {
-					url += '#map=' + scene.baseZoom(scene.zoom) + '/' + scene.center.lat + '/' + scene.center.lng;
-				}
+    				if (latlng) {
+    					url += '#map=' + map.getZoom() + '/' + latlng.lat + '/' + latlng.lng;
+    				}
 
-				window.open(url, '_blank');
+    				window.open(url, '_blank');
+                });
+
 			}
 
  			if (key.command) {
-				var url = 'http://vector.mapzen.com/osm/all/' + scene.tile_zoom + '/' + long2tile(e.latlng.lng,scene.tile_zoom)  + '/' + lat2tile(e.latlng.lat,scene.tile_zoom) + '.topojson?api_key=vector-tiles-HqUVidw';
+
+                // find minimum max_zoom of all sources
+                var max_zoom = 21;
+                for (source in scene.config.sources) {
+                    if (scene.config.sources.hasOwnProperty(source)) {
+                        if (scene.config.sources[source].max_zoom != "undefined") {
+                            max_zoom = Math.min(max_zoom, scene.config.sources[source].max_zoom);
+                        }
+                    }
+                }
+                var zoom = max_zoom < map.getZoom() ? max_zoom : Math.floor(map.getZoom());
+                var tileCoords = { x : long2tile(latlng.lng,zoom), y: lat2tile(latlng.lat,zoom), z: zoom };
+
+				var url = 'http://vector.mapzen.com/osm/all/' + zoom + '/' + tileCoords.x  + '/' + tileCoords.y + '.topojson?api_key=vector-tiles-HqUVidw';
 				window.open(url, '_blank');
-				//console.log( e );
 			}
 		}
 
