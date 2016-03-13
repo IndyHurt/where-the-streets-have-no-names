@@ -48,6 +48,7 @@ map = (function () {
     window.layer = layer;
     var scene = layer.scene;
     window.scene = scene;
+    var latlng = {};
 
     // setView expects format ([lat, long], zoom)
     var hash = new L.Hash(map);
@@ -76,104 +77,46 @@ map = (function () {
 
     // Feature selection
     function initFeatureSelection () {
-        var info = document.getElementById('info'); // rollover-popup
         var popup = document.getElementById('popup'); // click-popup
-
-        // Show selected feature on hover
-//         map.getContainer().addEventListener('mousemove', function (event) {
-//             if (picking) return;
-//             var pixel = { x: event.clientX, y: event.clientY };
-// 
-//             scene.getFeatureAt(pixel).then(function(selection) {
-//                 if (!selection) {
-//                     return;
-//                 }
-//                 var feature = selection.feature;
-//                 if (feature != null) {
-// 
-//                     var label = '';
-//                     if (feature.properties != null) {
-// 
-//                         var obj = JSON.parse(JSON.stringify(feature.properties));
-//                         label = "";
-//                         for (x in feature.properties) {
-//                             if (x == "sort_key" || x == "id" || x == "source") continue;
-//                             val = feature.properties[x]
-//                             label += "<span class='labelLine' key="+x+" value="+val+" onclick='setValuesFromSpan(this)'>"+x+" : "+val+"</span><br>"
-//                         }
-//                     }
-// 
-//                     if (label != '') {
-//                         info.innerHTML = '<span class="labelInner">' + label + '</span>';
-//                         info.style.left = (pixel.x + 5) + 'px';
-//                         info.style.top = (pixel.y + 10) + 'px';
-//                         info.style.visibility = 'visible';
-//                     }
-//                     else if (info.parentNode != null) {
-//                         info.style.visibility = 'hidden';
-//                     }
-//                 }
-//                 else if (info.parentNode != null) {
-//                     info.style.visibility = 'hidden';
-//                 }
-//             });
-// 
-//         });
 
         // feature edit popup
         map.getContainer().addEventListener('mousemove', function (event) {
             picking = true;
-            info.style.visibility = 'hidden';
+            latlng = map.mouseEventToLatLng(event);
 
             var pixel = { x: event.clientX, y: event.clientY };
-            var latlng = map.mouseEventToLatLng(event);
 
             scene.getFeatureAt(pixel).then(function(selection) {
-                var feature = selection.feature;
-
-                if (!selection || feature == null) {
+                if (!selection || selection.feature == null || selection.feature.properties == null) {
                     picking = false;
                     popup.style.visibility = 'hidden';
                     return;
-                }
-
+                }                
+                var properties = selection.feature.properties;
+                
                 // generate osm edit link
                 var url = 'https://www.openstreetmap.org/edit?';
-
                 var position = '19' + '/' + latlng.lat + '/' + latlng.lng;
 
-                if (selection.feature && selection.feature.properties.id) {
-                    url += 'way=' + selection.feature.properties.id + '#map=' + position;
+                if (properties.id) {
+                    url += 'way=' + properties.id + '#map=' + position;
                 }
 
                 var josmUrl = 'http://www.openstreetmap.org/edit?editor=remote#map='+position;
-                
-                // extra label information - currently unused
-                var label = '';
-                if (feature.properties != null) {
-                    var obj = JSON.parse(JSON.stringify(feature.properties));
-                    label = "";
-                    for (x in feature.properties) {
-                        if (x == "sort_key" || x == "id") continue;
-                        val = feature.properties[x];
-                        label += "<span class='labelLine' key="+x+" value="+val+">"+x+" : "+val+"</span><br>"
-                    }
-                }
 
                 popup.style.left = (pixel.x + 0) + 'px';
                 popup.style.top = (pixel.y + 0) + 'px';
                 
-                if (selection.feature.properties.name == undefined) {
+                if (properties.name == undefined) {
 	                popup.style.visibility = 'visible';
+                    popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
+                    popup.appendChild(createEditLinkElement(url, 'iD', 'Edit with iD ➹'));
+                    popup.appendChild(createEditLinkElement(josmUrl, 'JOSM', 'Edit with JOSM ➹'));
 	            }
-                popup.innerHTML = '<span class="labelInner">' + 'You found an unnamed street!' + '</span><br>';
-                popup.appendChild(createEditLinkElement(url, 'iD', 'Edit with iD ➹'));
-                popup.appendChild(createEditLinkElement(josmUrl, 'JOSM', 'Edit with JOSM ➹'));
             });
         });
 
         map.getContainer().addEventListener('mousedown', function (event) {
-            info.style.visibility = 'hidden';
             popup.style.visibility = 'hidden';
         });
     }
@@ -210,9 +153,11 @@ map = (function () {
     }
 
 	function long2tile(lon,zoom) { 
-        // console.log('lon:', lon, 'zoom:', zoom);
-        return (Math.floor((lon+180)/360*Math.pow(2,zoom))); }
-	function lat2tile(lat,zoom)  { return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom))); }    
+        return (Math.floor((lon+180)/360*Math.pow(2,zoom)));
+    }
+	function lat2tile(lat,zoom) {
+        return (Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2*Math.pow(2,zoom)));
+    }    
 
     /***** Render loop *****/
 	
@@ -221,8 +166,7 @@ map = (function () {
 		// Link to edit in OSM - hold 'e' and click
 		function onMapClick(e) {
             var pixel = { x: e.clientX, y: e.clientY };
-            var latlng = map.mouseEventToLatLng(e.originalEvent);
-			if (key.shift) {
+            if (key.shift) {
 				var url = 'https://www.openstreetmap.org/edit?';
                 scene.getFeatureAt(pixel).then(function(selection) {
                     console.log(selection.feature, selection.changed);
@@ -231,9 +175,7 @@ map = (function () {
     					url += 'way=' + selection.feature.id;
     				}
 
-    				if (latlng) {
-    					url += '#map=' + map.getZoom() + '/' + latlng.lat + '/' + latlng.lng;
-    				}
+					url += '#map=' + map.getZoom() + '/' + latlng.lat + '/' + latlng.lng;
 
     				window.open(url, '_blank');
                 });
@@ -276,9 +218,10 @@ map = (function () {
         layer.on('init', function() {
 	        addGUI();
             initFeatureSelection();
-            //console.log('1 map loc:', map_start_location, '\ncamera pos:', scene.camera.position);
-            if (defaultpos && typeof scene.camera.position != "undefined") {
-                map_start_location = [scene.camera.position[1], scene.camera.position[0], scene.camera.position[2]]
+            var camera = scene.config.cameras[scene.getActiveCamera()];
+            // if a camera position is set in the scene file, use that
+            if (defaultpos && typeof camera.position != "undefined") {
+                map_start_location = [camera.position[1], camera.position[0], camera.position[2]]
             }
             map.setView([map_start_location[0], map_start_location[1]], map_start_location[2]);
         });
